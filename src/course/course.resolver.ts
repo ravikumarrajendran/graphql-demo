@@ -1,35 +1,35 @@
 import { Resolver, Query, Mutation, Args } from "@nestjs/graphql";
 import { CourseType } from "./course.type";
 import {CourseService} from "./course.service";
+import { CourseDto } from "./course.dto";
 @Resolver(of => CourseType)
 export class CourseResolver {
 constructor(private courseService:CourseService){
 
 }
-    @Query(returns => CourseType)
-    course() {
-        this.staticCreateCourse();
-        return {
-            id: '404678',
-            name: 'ravikumar',
-            startDate: (new Date().toISOString()),
-            endDate: (new Date().toISOString())
-        };
-    }
-
-    @Mutation((returns) => CourseType)
+/**
+ * 
+ * @param name 
+ * @param startDate 
+ * @param endDate 
+ */
+@Mutation((returns) => CourseType)
     async createCourse(
-        @Args('name') name:string,
-        @Args('startDate')startDate :string,
-        @Args('endDate')endDate : string
+        @Args('courseDto') courseDto:CourseDto
         ){
       console.log('entered into createCourse-resolver-Mutation');
-        return await this.courseService.createCourse(name,startDate,endDate);
+        return await this.courseService.createCourse(courseDto);
 
+    }/**
+     * 
+     */
+    
+
+    
+    @Query(returns => [CourseType])
+    course() {
+        
+        return this.courseService.getAllCourse();
+        
     }
-    staticCreateCourse( ){
-        console.log('entered into createCourse-resolver');
-          return this.courseService.createCourse('404678',new Date().toISOString(),new Date().toISOString());
-  
-      }
 }

@@ -17,4 +17,8 @@ export class CourseRepository extends Repository<Course>{
         });
         return this.save(course);
     }
+
+    async getCourses(){
+        return this.find();
+    }
 }
